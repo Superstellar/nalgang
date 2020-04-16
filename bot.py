@@ -1,5 +1,5 @@
 import os, discord
-from attendance import Member, day_reset, conn, table_init
+from attendance import Member, day_reset, conn, table_init, scoreboard
 from datetime import datetime, timedelta
 from access_data import *
 
@@ -102,6 +102,10 @@ async def on_message(message):
             m0.give_point(m1, point)
             await message.channel.send("짜잔! {:s}님이 {:s}님에게 {:d}점을 선물했습니다.".format(m0.name,m1.name,point))
 
+    if message.content == ("!점수판"):
+        embed = discord.Embed(title="출석점수", description=scoreboard(message.guild))
+        await message.channel.send(embed=embed)
+    
     if message.content == ("!날갱도움"):
         await message.channel.send("```"+\
                 "!날갱 : 명령어가 곧 내용\n"+\
@@ -110,4 +114,5 @@ async def on_message(message):
                 "!날갱점수 $id : $id의 점수 확인하기\n"+\
                 "!점수보내기 $id $pt : $id를 가진 계정으로 $pt만큼의 점수 보내기\n"+\
                 "!날갱도움 : 도움말\n"+\
+                "!점수판 : 현재 서버의 사람들의 순위 정보 확인하기\n"+\
                 "```")

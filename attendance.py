@@ -104,3 +104,23 @@ def day_reset():
     table_init()
     count_save(0)
     return
+
+def emojify_number(s):
+    d = {'0': ':zero:', '1': ':one:', '2': ':two:', '3': ':three:', '4': ':four:', '5': ':five:', '6': ':six:', '7': ':seven:', '8': ':eight:', '9': ':nine:'}
+    return ''.join( (d[s[i]] for i in range(len(s))) )
+
+def scoreboard(guild):
+    c.execute('''SELECT id, point FROM Members ORDER BY point DESC''')
+    s=''
+    point=float('inf')
+    rank, num = 1,1
+    for Id, Point in c.fetchall():
+        member=guild.get_member(Id)
+        if member==None:
+            continue
+        if point!=Point:
+            rank=num
+            point=Point
+        s+='{:s} {:d}점 {:s}\n'.format(emojify_number(str(rank)),Point,member.mention)
+        num+=1
+    return s
